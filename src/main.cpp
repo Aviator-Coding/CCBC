@@ -2150,7 +2150,7 @@ int64_t GetBlockValue(int nHeight)
             nSubsidy = 25 * COIN;
         } else if (nHeight <= 556800 && nHeight > 297600) { //180 days            2,592,000 coins
             nSubsidy = 10 * COIN;
-        } else if (nHeight <= 556800) { //Till max supply           Total coins used 17,882,000
+        } else if (nHeight >= 556800) { //Till max supply           Total coins used 17,882,000
             nSubsidy = 5 * COIN;        //57,026.38 days will max supply is reached
         }
 
@@ -2455,8 +2455,8 @@ bool IsTreasuryBlock(int nHeight)
     //This is put in for when dev fee is turned off.
     if (nHeight < nStartTreasuryBlock)
         return false;
-    else if (IsSporkActive(SPORK_17_TREASURY_PAYMENT_ENFORCEMENT))
-        return false;
+  //  else if (IsSporkActive(SPORK_17_TREASURY_PAYMENT_ENFORCEMENT))
+     //   return false;
     else if ((nHeight - nStartTreasuryBlock) % nTreasuryBlockStep == 0)
         return true;
     else
@@ -2487,7 +2487,7 @@ int64_t GetTreasuryAward(int nHeight)
             return 1800 * COIN; //1,800 aday at 5% 12.5 coins per block
         } else if (nHeight < 556800 && nHeight > 297600) {
             return 720 * COIN; //720 aday at 5% 5 coins per block
-        } else if (nHeight < 556800) {
+        } else if (nHeight > 556800) {
             return 360 * COIN; //720 aday at 5% 2.5 coins per block
         } else {
             return 3600;
@@ -2508,8 +2508,8 @@ bool IsReviveBlock(int nHeight)
 
     if (nHeight < nStartReviveBlock)
         return false;
-    else if (IsSporkActive(SPORK_18_REVIVE_PAYMENT_ENFORCEMENT))
-        return false;
+    //else if (IsSporkActive(SPORK_18_REVIVE_PAYMENT_ENFORCEMENT))
+      //  return false;
     else if ((nHeight - nStartReviveBlock) % nReviveBlockStep == 0)
         return true;
     else
@@ -2540,7 +2540,7 @@ int64_t GetReviveAward(int nHeight)
             return 1800 * COIN; //1,800 aday at 5% 12.5 coins per block
         } else if (nHeight < 556800 && nHeight > 297600) {
             return 720 * COIN; //720 aday at 5% 5 coins per block
-        } else if (nHeight < 556800) {
+        } else if (nHeight > 556800) {
             return 360 * COIN; //720 aday at 5% 2.5 coins per block
         } else {
             return 3600;
@@ -5786,6 +5786,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         // available. If not, ask the first peer connected for them.
         if (!pSporkDB->SporkExists(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) &&
             !pSporkDB->SporkExists(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2) &&
+            !pSporkDB->SporkExists(SPORK_19_NEW_PROTOCOL_ENFORCEMENT_3) &&
+            !pSporkDB->SporkExists(SPORK_20_DGW_ENFORCEMENT) &&
             !pSporkDB->SporkExists(SPORK_11_LOCK_INVALID_UTXO) &&
             !pSporkDB->SporkExists(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
             LogPrintf("Required sporks not found, asking peer to send them\n");
@@ -6618,10 +6620,14 @@ int ActiveProtocol()
 
     // SPORK_19 will be used after SPORK_15 is used and commented out from being turned off.
     // This will be turned on after first of the year to enforce me spork privkey!
-    if (IsSporkActive(SPORK_19_NEW_PROTOCOL_ENFORCEMENT_3))
-        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-    return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
-}
+    //if (IsSporkActive(SPORK_19_NEW_PROTOCOL_ENFORCEMENT_3))
+      //  return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
+    //return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
+
+	    if (IsSporkActive(SPORK_20_DGW_ENFORCEMENT) || chainActive.Height() >= Params().DGW_POS_FORK_BLOCK()) 
+			return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
+            return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
+    }
 
 // requires LOCK(cs_vRecvMsg)
 bool ProcessMessages(CNode* pfrom)
