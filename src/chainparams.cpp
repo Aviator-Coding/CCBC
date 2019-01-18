@@ -102,7 +102,7 @@ public:
         vReviveRewardAddress = "SgMdQaxB7woK4dtudTCWcVizCYhBjzcfuv";   //This address will be depreicated when spork 18 is turned on and coins will be burned.
         vTreasuryRewardAddress = "SdkfmdG4b3uUt6cFZhXvbyPyAVM6GGmxr9"; //This address is held by Tfinch and will be paying out coins to team and funding of projects.
         vPartnerRewardAddress = "SUm8pHsUSs8Amgun38Z9j11LPQzZzV2eJC";  //This address is owned by Mattnyy
-            strNetworkID = "main";
+        strNetworkID = "main";
         /**
 		* The message start string is designed to be unlikely to occur in normal data.
 		* The characters are rarely used upper ASCII, not valid as UTF-8, and produce
