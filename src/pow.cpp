@@ -58,7 +58,7 @@ unsigned int GetDGWNextWorkRequired(const CBlockIndex* pindexLast, const CBlockH
 
     uint256 bnNew(PastDifficultyAverage);
 
-    int64_t _nTargetTimespan = CountBlocks * targetSpacing;
+    int64_t _nTargetTimespan = CountBlocks * Params().TargetSpacing();
 
     if (nActualTimespan < _nTargetTimespan / 3)
         nActualTimespan = _nTargetTimespan / 3;
@@ -69,8 +69,8 @@ unsigned int GetDGWNextWorkRequired(const CBlockIndex* pindexLast, const CBlockH
     bnNew *= nActualTimespan;
     bnNew /= _nTargetTimespan;
 
-    if (bnNew > workLimit) {
-        bnNew = workLimit;
+    if (bnNew > Params().ProofOfWorkLimit())) {
+        bnNew = Params().ProofOfWorkLimit());
     }
 
     return bnNew.GetCompact();
