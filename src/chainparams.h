@@ -159,6 +159,7 @@ protected:
     int64_t nTargetTimespan;
     int64_t nTargetSpacing;
     int64_t nPOSTargetSpacing;
+    int nPartnerAddressBlock;
     int nPOSDGWForkBlock;
     int nLastPOWBlock;
     int nMasternodeCountDrift;
