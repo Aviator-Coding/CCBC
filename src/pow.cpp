@@ -18,7 +18,7 @@
 
 unsigned int GetDGWNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock, int64_t targetSpacing, uint256 workLimit)
 {
-    /* current difficulty formula, CCBC - DarkGravity v3, written by Evan Duffield - evan@dashpay.io */
+    /* current difficulty formula, kyd - DarkGravity v3, written by Evan Duffield - evan@dashpay.io */
     const CBlockIndex* BlockLastSolved = pindexLast;
     const CBlockIndex* BlockReading = pindexLast;
     int64_t nActualTimespan = 0;
@@ -58,7 +58,7 @@ unsigned int GetDGWNextWorkRequired(const CBlockIndex* pindexLast, const CBlockH
 
     uint256 bnNew(PastDifficultyAverage);
 
-    int64_t _nTargetTimespan = CountBlocks * Params().TargetSpacing();
+    int64_t _nTargetTimespan = CountBlocks * targetSpacing;
 
     if (nActualTimespan < _nTargetTimespan / 3)
         nActualTimespan = _nTargetTimespan / 3;
@@ -69,8 +69,8 @@ unsigned int GetDGWNextWorkRequired(const CBlockIndex* pindexLast, const CBlockH
     bnNew *= nActualTimespan;
     bnNew /= _nTargetTimespan;
 
-    if (bnNew > Params().ProofOfWorkLimit())) {
-        bnNew = Params().ProofOfWorkLimit());
+    if (bnNew > workLimit) {
+        bnNew = workLimit;
     }
 
     return bnNew.GetCompact();
